@@ -11,13 +11,41 @@ class Zookeeper(db.Model):
     __tablename__ = 'zookeepers'
 
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True)
+    birthday = db.Column(db.String)
+
+    animals = db.relationship('Animal', backref='zookeeper')
+
+    def __repr__(self):
+        return f'<Zookeeper Name: {self.name}, Zookeeper Birthday: {self.birthday}>'
+
+
 
 class Enclosure(db.Model):
     __tablename__ = 'enclosures'
 
     id = db.Column(db.Integer, primary_key=True)
+    environment = db.Column(db.String)
+    open_to_visitors = db.Column(db.Boolean)
+
+    animals = db.relationship('Animal', backref='enclosure')
+
+    def __repr__(self):
+        return f'<Environment: {self.environment}, Open to Visitors:{self.open_to_visitors}'
+
+
 
 class Animal(db.Model):
     __tablename__ = 'animals'
 
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    species = db.Column(db.String)
+
+    zookeeper_id = db.Column(db.Integer, db.ForeignKey('zookeepers.id'))
+    enclosure_id = db.Column(db.Integer, db.ForeignKey('enclosures.id'))
+
+    
+    def __repr__(self):
+        return f'<Animal Name: {self.name}, Animal Name: {self.species}'
+
